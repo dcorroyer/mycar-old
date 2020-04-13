@@ -4,11 +4,30 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\InvoiceRepository")
  *
- * @ApiResource()
+ * @ApiResource(
+ *      collectionOperations={"GET", "POST"},
+ *      itemOperations={"GET", "PUT", "PATCH", "DELETE"},
+ *      subresourceOperations={
+ *          "api_maintenances_invoices_get_subresource"={
+ *              "normalization_context"={"groups"={"invoices_subresource"}}
+ *          }
+ *      },
+ *      attributes={
+ *          "order": {"chrono":"ASC"}
+ *      },
+ *      normalizationContext={
+ *          "groups"={"invoices_read"}
+ *      },
+ *      denormalizationContext={
+ *          "disable_type_enforcement"=true
+ *      }
+ * )
  */
 class Invoice
 {
@@ -16,22 +35,29 @@ class Invoice
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"invoices_read", "maintenances_read", "invoices_subresource"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"invoices_read", "maintenances_read", "invoices_subresource"})
      */
     private $filename;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Maintenance", inversedBy="invoices")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"invoices_read"})
+     * @Assert\NotBlank(message="La maintenance liée à la facture est obligatoire")
      */
     private $maintenance;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"invoices_read", "maintenances_read", "invoices_subresource"})
+     * @Assert\NotBlank(message="Le chrono de la facture est obligatoire")
+     * @Assert\Type(type="integer", message="Le chrono doit être un nombre")
      */
     private $chrono;
 
@@ -69,7 +95,7 @@ class Invoice
         return $this->chrono;
     }
 
-    public function setChrono(int $chrono): self
+    public function setChrono($chrono): self
     {
         $this->chrono = $chrono;
 

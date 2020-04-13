@@ -2,16 +2,44 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity("email", message="Un utilisateur ayant cette adresse email existe déjà")
  *
- * @ApiResource()
+ * @ApiResource(
+ *      collectionOperations={"GET", "POST"},
+ *      itemOperations={"GET", "PUT", "PATCH", "DELETE"},
+ *      subresourceOperations={
+ *          "vehicules_get_subresource"={"path"="/users/{id}/vehicules"}
+ *      },
+ *      attributes={
+ *          "pagination_enabled"=true,
+ *          "pagination_items_per_page"=20,
+ *          "order": {"lastname":"ASC"}
+ *      },
+ *      normalizationContext={
+ *          "groups"={"users_read"}
+ *      }
+ * )
+ * @ApiFilter(
+ *      SearchFilter::class, properties={"lastname":"partial", "firstname":"partial", "email":"partial"}
+ * )
+ * @ApiFilter(
+ *      OrderFilter::class, properties={"lastname", "firstname"}
+ * )
  */
 class User implements UserInterface
 {
@@ -19,37 +47,53 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"users_read", "maintenances_read", "vehicules_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Groups({"users_read", "maintenances_read", "vehicules_read"})
+     * @Assert\NotBlank(message="Le nom de famille de l'utilisateur est obligatoire")
+     * @Assert\Length(min="2", minMessage="Le nom de famille doit faire entre 2 et 255 caractères",
+     *     max="255", maxMessage="Le nom de famille doit faire entre 2 et 255 caractères")
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Groups({"users_read", "maintenances_read", "vehicules_read"})
+     * @Assert\NotBlank(message="Le prénom de l'utilisateur est obligatoire")
+     * @Assert\Length(min="2", minMessage="Le prénom doit faire entre 2 et 255 caractères",
+     *     max="255", maxMessage="Le prénom doit faire entre 2 et 255 caractères")
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"users_read", "maintenances_read", "vehicules_read"})
+     * @Assert\NotBlank(message="L'email doit être renseigné !")
+     * @Assert\Email(message="Le format de l'adresse email doit être valide")
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
+     * @Groups({"users_read"})
      */
     private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="Le mot de passe est obligatoire")
      */
     private $password;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Vehicule", mappedBy="owner", orphanRemoval=true)
+     * @Groups({"users_read"})
+     * @ApiSubresource()
      */
     private $vehicules;
 

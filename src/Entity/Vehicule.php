@@ -3,14 +3,35 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VehiculeRepository")
  *
- * @ApiResource()
+ * @ApiResource(
+ *      collectionOperations={"GET", "POST"},
+ *      itemOperations={"GET", "PUT", "PATCH", "DELETE"},
+ *      subresourceOperations={
+ *          "maintenances_get_subresource"={"path"="/vehicules/{id}/maintenances"},
+ *          "api_users_vehicules_get_subresource"={
+ *              "normalization_context"={"groups"={"vehicules_subresource"}}
+ *          }
+ *      },
+ *     attributes={
+ *          "order": {"identification":"ASC"}
+ *     },
+ *     normalizationContext={
+ *          "groups"={"vehicules_read"}
+ *     },
+ *     denormalizationContext={
+ *         "disable_type_enforcement"=true
+ *     }
+ * )
  */
 class Vehicule
 {
@@ -18,48 +39,102 @@ class Vehicule
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"vehicules_read", "users_read", "maintenances_read", "vehicules_subresource"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Groups({"vehicules_read", "users_read", "maintenances_read", "vehicules_subresource"})
+     * @Assert\NotBlank(message="Le type du véhicule est obligatoire")
+     * @Assert\Choice(choices={"Voiture", "Moto", "Scooter"},
+     *     message="Le type du véhicule doit être Voiture, Moto ou Scooter")
      */
     private $type;
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Groups({"vehicules_read", "users_read", "maintenances_read", "vehicules_subresource"})
+     * @Assert\NotBlank(message="Le numéro d'immatriculation du véhicule est obligatoire")
+     * @Assert\Length(min="2", minMessage="Le numéro d'immatriculation du véhicule doit faire entre 2 et 20 caractères",
+     *     max="20", maxMessage="Le numéro d'immatriculation du véhicule doit faire entre 2 et 20 caractères")
      */
     private $identification;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Groups({"vehicules_read", "users_read", "maintenances_read", "vehicules_subresource"})
+     * @Assert\NotBlank(message="La marque du véhicule est obligatoire")
+     * @Assert\Length(min="2", minMessage="La marque du véhicule doit faire entre 2 et 100 caractères",
+     *     max="100", maxMessage="La marque du véhicule doit faire entre 2 et 100 caractères")
      */
     private $brand;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Groups({"vehicules_read", "users_read", "maintenances_read", "vehicules_subresource"})
+     * @Assert\NotBlank(message="Le modèle du véhicule est obligatoire")
+     * @Assert\Length(min="2", minMessage="Le modèle du véhicule doit faire entre 2 et 100 caractères",
+     *     max="100", maxMessage="Le modèle du véhicule doit faire entre 2 et 100 caractères")
      */
     private $reference;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
+     * @Groups({"vehicules_read", "users_read", "maintenances_read", "vehicules_subresource"})
+     * @Assert\NotBlank(message="La date de première mise en circulation du véhicule est obligatoire")
+     * @Assert\DateTime(message="La date de la première mise en circulation doit être au format YYY-MM-DD")
      */
     private $modelyear;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="vehicules")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"vehicules_read", "maintenances_read"})
+     * @Assert\NotBlank(message="Le propriétaire du véhicule est obligatoire")
      */
     private $owner;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Maintenance", mappedBy="vehicule", orphanRemoval=true)
+     * @Groups({"vehicules_read"})
+     * @ApiSubresource()
      */
     private $maintenances;
+
+    /**
+     * @ORM\Column(type="integer")
+     * @Groups({"vehicules_read", "users_read", "vehicules_subresource"})
+     * @Assert\NotBlank(message="Le chrono du vehicule est obligatoire")
+     * @Assert\Type(type="integer", message="Le chrono doit être un nombre")
+     */
+    private $chrono;
 
     public function __construct()
     {
         $this->maintenances = new ArrayCollection();
+    }
+
+    /**
+     * Permet de récupérer le nombre total des maintenances
+     * @Groups({"vehicules_read"})
+     * @return int
+     */
+    public function getNbAmount(): int
+    {
+        return count($this->maintenances);
+    }
+
+    /**
+     * Permet de récupérer le total des maintenances
+     * @Groups({"vehicules_read"})
+     * @return float
+     */
+    public function getTotalAmount(): float
+    {
+        return array_reduce($this->maintenances->toArray(), function ($total, $maintenance) {
+            return $total + $maintenance->getAmount();
+        }, 0);
     }
 
     public function getId(): ?int
@@ -120,7 +195,7 @@ class Vehicule
         return $this->modelyear;
     }
 
-    public function setModelyear(\DateTimeInterface $modelyear): self
+    public function setModelyear($modelyear): self
     {
         $this->modelyear = $modelyear;
 
@@ -166,6 +241,18 @@ class Vehicule
                 $maintenance->setVehicule(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getChrono(): ?int
+    {
+        return $this->chrono;
+    }
+
+    public function setChrono($chrono): self
+    {
+        $this->chrono = $chrono;
 
         return $this;
     }

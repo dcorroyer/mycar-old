@@ -30,7 +30,8 @@ class AppFixtures extends Fixture
         for($c = 0; $c < 30; $c++) {
             $user = new User();
 
-            $chrono_maintenances = 1;
+            $chrono_vehicules = 1;
+
             $hash = $this->encoder->encodePassword($user, 'password');
 
             $user->setLastname($faker->lastName)
@@ -42,12 +43,18 @@ class AppFixtures extends Fixture
 
             for($v = 0; $v < mt_rand(1, 3); $v++) {
                 $vehicule = new Vehicule();
+
+                $chrono_maintenances = 1;
+
                 $vehicule->setType($faker->randomElement(['Voiture', 'Moto', 'Scooter']))
                     ->setIdentification($faker->creditCardNumber)
                     ->setBrand($faker->name)
                     ->setReference($faker->name)
                     ->setModelyear($faker->dateTimeBetween('-2 years', '+2 years'))
-                    ->setOwner($user);
+                    ->setOwner($user)
+                    ->setChrono($chrono_vehicules);
+
+                $chrono_vehicules++;
 
                 $manager->persist($vehicule);
 
@@ -56,7 +63,7 @@ class AppFixtures extends Fixture
 
                     $chrono_invoices = 1;
 
-                    $maintenance->setType($faker->randomElement(['Réparation', 'Entretien']))
+                    $maintenance->setType($faker->randomElement(['Réparation', 'Entretien', 'Restauration']))
                         ->setDate($faker->dateTimeBetween('-2 years', '+2 years'))
                         ->setAmount($faker->randomFloat(2, 10, 2500))
                         ->setVehicule($vehicule)
