@@ -90,7 +90,7 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Vehicule", mappedBy="owner", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Vehicule", mappedBy="user", orphanRemoval=true)
      * @Groups({"users_read"})
      * @ApiSubresource()
      */
@@ -215,7 +215,7 @@ class User implements UserInterface
     {
         if (!$this->vehicules->contains($vehicule)) {
             $this->vehicules[] = $vehicule;
-            $vehicule->setOwner($this);
+            $vehicule->setUser($this);
         }
 
         return $this;
@@ -226,8 +226,8 @@ class User implements UserInterface
         if ($this->vehicules->contains($vehicule)) {
             $this->vehicules->removeElement($vehicule);
             // set the owning side to null (unless already changed)
-            if ($vehicule->getOwner() === $this) {
-                $vehicule->setOwner(null);
+            if ($vehicule->getUser() === $this) {
+                $vehicule->setUser(null);
             }
         }
 

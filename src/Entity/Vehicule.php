@@ -93,7 +93,7 @@ class Vehicule
      * @Groups({"vehicules_read", "maintenances_read"})
      * @Assert\NotBlank(message="Le propriétaire du véhicule est obligatoire")
      */
-    private $owner;
+    private $user;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Maintenance", mappedBy="vehicule", orphanRemoval=true)
@@ -202,14 +202,14 @@ class Vehicule
         return $this;
     }
 
-    public function getOwner(): ?User
+    public function getUser(): ?User
     {
-        return $this->owner;
+        return $this->user;
     }
 
-    public function setOwner(?User $owner): self
+    public function setUser(?User $user): self
     {
-        $this->owner = $owner;
+        $this->user = $user;
 
         return $this;
     }

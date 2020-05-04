@@ -51,7 +51,7 @@ class AppFixtures extends Fixture
                     ->setBrand($faker->name)
                     ->setReference($faker->name)
                     ->setModelyear($faker->dateTimeBetween('-2 years', '+2 years'))
-                    ->setOwner($user)
+                    ->setUser($user)
                     ->setChrono($chrono_vehicules);
 
                 $chrono_vehicules++;
