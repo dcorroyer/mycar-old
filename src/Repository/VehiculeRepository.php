@@ -2,9 +2,12 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Vehicule;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 
 /**
  * @method Vehicule|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +20,24 @@ class VehiculeRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Vehicule::class);
+    }
+
+    public function findNextChrono(User $user)
+    {
+        try {
+            return $this->createQueryBuilder("v")
+                ->select("v.chrono")
+                ->where("v.user = :user")
+                ->setParameter("user", $user)
+                ->orderBy("v.chrono", "DESC")
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getSingleScalarResult() + 1;
+        } catch (NoResultException $e) {
+            return 1;
+        } catch (NonUniqueResultException $e) {
+            return 1;
+        }
     }
 
     // /**

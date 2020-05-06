@@ -7,11 +7,13 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VehiculeRepository")
+ * @UniqueEntity("identification", message="Un véhicule ayant cette immatriculation existe déjà")
  *
  * @ApiResource(
  *      collectionOperations={"GET", "POST"},
@@ -83,7 +85,6 @@ class Vehicule
      * @ORM\Column(type="datetime")
      * @Groups({"vehicules_read", "users_read", "maintenances_read", "vehicules_subresource"})
      * @Assert\NotBlank(message="La date de première mise en circulation du véhicule est obligatoire")
-     * @Assert\DateTime(message="La date de la première mise en circulation doit être au format YYY-MM-DD")
      */
     private $modelyear;
 
@@ -195,7 +196,7 @@ class Vehicule
         return $this->modelyear;
     }
 
-    public function setModelyear($modelyear): self
+    public function setModelyear(\DateTimeInterface $modelyear): self
     {
         $this->modelyear = $modelyear;
 
