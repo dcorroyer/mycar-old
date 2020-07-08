@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -88,6 +89,16 @@ class Invoice
         $this->maintenance = $maintenance;
 
         return $this;
+    }
+
+    /**
+     * @return Vehicule|null
+     * @Groups({"invoices_read"})
+     * @ApiSubresource()
+     */
+    public function getVehicule(): ?Vehicule
+    {
+        return $this->getMaintenance()->getVehicule();
     }
 
     public function getChrono(): ?int

@@ -57,7 +57,7 @@ class Vehicule
 
     /**
      * @ORM\Column(type="string", length=20)
-     * @Groups({"vehicules_read", "users_read", "maintenances_read", "vehicules_subresource"})
+     * @Groups({"vehicules_read", "users_read", "maintenances_read", "vehicules_subresource", "invoices_read"})
      * @Assert\NotBlank(message="Le numéro d'immatriculation du véhicule est obligatoire")
      * @Assert\Length(min="2", minMessage="Le numéro d'immatriculation du véhicule doit faire entre 2 et 20 caractères",
      *     max="20", maxMessage="Le numéro d'immatriculation du véhicule doit faire entre 2 et 20 caractères")
@@ -66,7 +66,7 @@ class Vehicule
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Groups({"vehicules_read", "users_read", "maintenances_read", "vehicules_subresource"})
+     * @Groups({"vehicules_read", "users_read", "maintenances_read", "vehicules_subresource", "invoices_read"})
      * @Assert\NotBlank(message="La marque du véhicule est obligatoire")
      * @Assert\Length(min="2", minMessage="La marque du véhicule doit faire entre 2 et 100 caractères",
      *     max="100", maxMessage="La marque du véhicule doit faire entre 2 et 100 caractères")
@@ -75,7 +75,7 @@ class Vehicule
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Groups({"vehicules_read", "users_read", "maintenances_read", "vehicules_subresource"})
+     * @Groups({"vehicules_read", "users_read", "maintenances_read", "vehicules_subresource", "invoices_read"})
      * @Assert\NotBlank(message="Le modèle du véhicule est obligatoire")
      * @Assert\Length(min="2", minMessage="Le modèle du véhicule doit faire entre 2 et 100 caractères",
      *     max="100", maxMessage="Le modèle du véhicule doit faire entre 2 et 100 caractères")
