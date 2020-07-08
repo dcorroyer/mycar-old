@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -191,12 +192,12 @@ class Vehicule
         return $this;
     }
 
-    public function getModelyear(): ?\DateTimeInterface
+    public function getModelyear(): ?DateTimeInterface
     {
         return $this->modelyear;
     }
 
-    public function setModelyear(\DateTimeInterface $modelyear): self
+    public function setModelyear(DateTimeInterface $modelyear): self
     {
         $this->modelyear = $modelyear;
 

@@ -3,8 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Maintenance;
+use App\Entity\Vehicule;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 
 /**
  * @method Maintenance|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +20,24 @@ class MaintenanceRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Maintenance::class);
+    }
+
+    public function findNextChrono(Vehicule $vehicule)
+    {
+        try {
+            return $this->createQueryBuilder("m")
+                    ->select("m.chrono")
+                    ->where("m.vehicule = :vehicule")
+                    ->setParameter("vehicule", $vehicule)
+                    ->orderBy("m.chrono", "DESC")
+                    ->setMaxResults(1)
+                    ->getQuery()
+                    ->getSingleScalarResult() + 1;
+        } catch (NoResultException $e) {
+            return 1;
+        } catch (NonUniqueResultException $e) {
+            return 1;
+        }
     }
 
     // /**

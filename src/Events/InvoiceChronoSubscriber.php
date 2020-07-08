@@ -3,20 +3,20 @@
 namespace App\Events;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
-use App\Entity\Maintenance;
-use App\Repository\MaintenanceRepository;
+use App\Entity\Invoice;
+use App\Repository\InvoiceRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class MaintenanceChronoSubscriber implements EventSubscriberInterface
+class InvoiceChronoSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var MaintenanceRepository
+     * @var InvoiceChronoSubscriber
      */
     private $repository;
 
-    public function __construct(MaintenanceRepository $repository)
+    public function __construct(InvoiceRepository $repository)
     {
         $this->repository = $repository;
     }
@@ -24,17 +24,17 @@ class MaintenanceChronoSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::VIEW => ['setChronoForMaintenance', EventPriorities::PRE_VALIDATE]
+            KernelEvents::VIEW => ['setChronoForInvoice', EventPriorities::PRE_VALIDATE]
         ];
     }
 
-    public function setChronoForMaintenance(ViewEvent $event)
+    public function setChronoForInvoice(ViewEvent $event)
     {
         $result = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
-        if ($result instanceof Maintenance && $method == "POST") {
-            $nextChrono = $this->repository->findNextChrono($result->getVehicule());
+        if ($result instanceof Invoice && $method == "POST") {
+            $nextChrono = $this->repository->findNextChrono($result->getMaintenance());
             $result->setChrono($nextChrono);
         }
     }

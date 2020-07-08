@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -47,7 +48,6 @@ class Maintenance
      * @ORM\Column(type="datetime")
      * @Groups({"maintenances_read", "vehicules_read", "invoices_read", "maintenances_subresource"})
      * @Assert\NotBlank(message="La date de la maintenance est obligatoire")
-     * @Assert\DateTime(message="La date de la maintenance doit être au format YYY-MM-DD")
      */
     private $date;
 
@@ -101,12 +101,12 @@ class Maintenance
         return $this->id;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getDate(): ?DateTimeInterface
     {
         return $this->date;
     }
 
-    public function setDate($date): self
+    public function setDate(DateTimeInterface $date): self
     {
         $this->date = $date;
 

@@ -3,8 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Invoice;
+use App\Entity\Maintenance;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 
 /**
  * @method Invoice|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +20,24 @@ class InvoiceRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Invoice::class);
+    }
+
+    public function findNextChrono(Maintenance $maintenance)
+    {
+        try {
+            return $this->createQueryBuilder("i")
+                    ->select("i.chrono")
+                    ->where("i.maintenance = :maintenance")
+                    ->setParameter("maintenance", $maintenance)
+                    ->orderBy("i.chrono", "DESC")
+                    ->setMaxResults(1)
+                    ->getQuery()
+                    ->getSingleScalarResult() + 1;
+        } catch (NoResultException $e) {
+            return 1;
+        } catch (NonUniqueResultException $e) {
+            return 1;
+        }
     }
 
     // /**
