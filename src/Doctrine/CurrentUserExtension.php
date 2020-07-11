@@ -67,6 +67,6 @@ class CurrentUserExtension implements QueryCollectionExtensionInterface, QueryIt
 
     public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, string $operationName = null, array $context = [])
     {
-        // TODO: Implement applyToItem() method.
+        $this->addWhere($queryBuilder, $resourceClass);
     }
 }
