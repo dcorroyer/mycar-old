@@ -30,6 +30,7 @@ security:
         api:
             pattern:   ^/api
             stateless: true
+            anonymous: true
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
@@ -46,9 +47,9 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/invoices, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/api/maintenances, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/api/vehicules, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/api/users, roles: IS_AUTHENTICATED_FULLY, methods: [GET, PUT, DELETE] }
+        - { path: ^/api/invoices, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/maintenances, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/vehicules, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/users, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [GET, PUT, DELETE] }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

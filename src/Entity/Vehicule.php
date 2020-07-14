@@ -2,8 +2,11 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -26,7 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          }
  *      },
  *     attributes={
- *          "order": {"identification":"ASC"}
+ *          "order": {"id":"ASC"}
  *     },
  *     normalizationContext={
  *          "groups"={"vehicules_read"}
@@ -34,6 +37,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     denormalizationContext={
  *         "disable_type_enforcement"=true
  *     }
+ * )
+ * @ApiFilter(
+ *      SearchFilter::class, properties={"brand":"partial", "reference":"partial"}
+ * )
+ * @ApiFilter(
+ *      OrderFilter::class, properties={"brand", "reference"}
  * )
  */
 class Vehicule

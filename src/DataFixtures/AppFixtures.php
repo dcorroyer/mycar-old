@@ -58,7 +58,7 @@ class AppFixtures extends Fixture
 
                 $manager->persist($vehicule);
 
-                for($m = 0; $m < mt_rand(1, 10); $m++) {
+                for($m = 0; $m < mt_rand(0, 10); $m++) {
                     $maintenance = new Maintenance();
 
                     $chrono_invoices = 1;
