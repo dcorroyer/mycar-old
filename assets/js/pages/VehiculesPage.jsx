@@ -17,10 +17,12 @@ const VehiculesPage = props => {
         } catch (error) {
             console.log(error.response);
         }
-    }
+    };
 
     //Récupération des véhicules au chargement du composant
-    useEffect(() => fetchVehicules(), []);
+    useEffect(() => {
+        fetchVehicules()
+    }, []);
 
     //Gestion de la suppression d'un véhicule
     const handleDelete = async id => {
@@ -35,11 +37,13 @@ const VehiculesPage = props => {
     };
 
     //Gestion du changement de page
-    const handlePageChange = page => setCurrentPage(page);
+    const handlePageChange = page => {
+        setCurrentPage(page);
+    };
 
     //Gestion de la recherche
     const handleSearch = ({ currentTarget }) => {
-        setSearch(currentTarget);
+        setSearch(currentTarget.value);
         setCurrentPage(1);
     };
 
