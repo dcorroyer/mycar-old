@@ -18,7 +18,7 @@ const Navbar = ({ history }) => {
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <NavLink className="navbar-brand" to="/">Maintain Your Car</NavLink>
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"></span>
+                <span className="navbar-toggler-icon"/>
             </button>
 
             <div className="collapse navbar-collapse" id="navbarColor03">
@@ -59,6 +59,6 @@ const Navbar = ({ history }) => {
             </div>
         </nav>
      );
-}
+};
  
 export default Navbar;

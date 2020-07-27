@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Pagination from '../components/Pagination';
 import VehiculesAPI from '../services/vehiculesAPI';
 
@@ -65,7 +66,10 @@ const VehiculesPage = props => {
 
     return ( 
         <>
-            <h1>Liste des véhicules</h1>
+            <div className="mb-3 d-flex justify-content-between align-items-center">
+                <h1>Liste des véhicules</h1>
+                <Link to="/vehicules/new" className="btn btn-primary">Créer un véhicule</Link>
+            </div>
 
             <div className="form-group">
                 <input 
@@ -81,6 +85,7 @@ const VehiculesPage = props => {
                 <thead>
                     <tr>
                         <th>Id.</th>
+                        <th>Type</th>
                         <th>Marque</th>
                         <th>Modèle</th>
                         <th>Année</th>
@@ -94,6 +99,7 @@ const VehiculesPage = props => {
                     {paginatedVehicules.map(vehicule => 
                         <tr key={vehicule.id}>
                             <td>{vehicule.id}</td>
+                            <td>{vehicule.type}</td>
                             <td>{vehicule.brand}</td>
                             <td>{vehicule.reference}</td>
                             <td>{vehicule.modelyear}</td>

@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import AuthAPI from '../services/authAPI';
 import AuthContext from '../contexts/AuthContext';
+import Field from "../components/forms/Field";
 
 
 const LoginPage = ({ history }) => {
@@ -8,7 +9,7 @@ const LoginPage = ({ history }) => {
     const { setIsAuthenticated } = useContext(AuthContext);
 
     const [credentials, setCredentials] = useState({
-        username: "zjohns@ondricka.com",
+        username: "ben21@kessler.com",
         password: ""
     });
     const [error, setError] = useState("");
@@ -40,32 +41,23 @@ const LoginPage = ({ history }) => {
             <h1>Connexion !</h1>
 
             <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="username"></label>
-                    <input 
-                        value={credentials.username}
-                        onChange={handleChange}
-                        type="email" 
-                        placeholder="Adresse email"
-                        name="username"
-                        id="username"
-                        className={"form-control" + (error && " is-invalid")}
-                    />
-                    {error && <p className="invalid-feedback">{error}</p>}
-                    
-                </div>
-                <div className="form-group">
-                    <label htmlFor="password"></label>
-                    <input 
-                        value={credentials.password}
-                        onChange={handleChange}
-                        type="password" 
-                        placeholder="Mot de passe"
-                        name="password"
-                        id="password"
-                        className="form-control"
-                    />
-                </div>
+                <Field
+                    label="Adresse email"
+                    name="username"
+                    value={credentials.username}
+                    onChange={handleChange}
+                    error={error}
+                />
+
+                <Field
+                    label="Mot de passe"
+                    name="password"
+                    value={credentials.password}
+                    onChange={handleChange}
+                    type="password"
+                    error=""
+                />
+
                 <div className="form-group">
                     <button type="submit" className="btn btn-success">
                         Je me connecte
@@ -74,6 +66,6 @@ const LoginPage = ({ history }) => {
             </form>
         </>
      );
-}
+};
  
 export default LoginPage;

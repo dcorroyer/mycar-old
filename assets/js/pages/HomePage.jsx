@@ -13,6 +13,6 @@ const HomePage = (props) => {
             </p>
         </div>
      );
-}
+};
  
 export default HomePage;

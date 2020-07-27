@@ -59,10 +59,7 @@ function isAuthenticated() {
     //Si oui et qu'il est valide
     if (token) {
         const {exp: expiration} = JwtDecode(token);
-        if (expiration * 1000 > new Date().getTime()) {
-            return true;
-        }
-        return false;
+        return expiration * 1000 > new Date().getTime();
     }
     return false;
 }

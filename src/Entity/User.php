@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ApiResource(
  *      collectionOperations={"GET", "POST"},
- *      itemOperations={"GET", "PUT", "PATCH", "DELETE"},
+ *      itemOperations={"GET", "PUT", "DELETE"},
  *      subresourceOperations={
  *          "vehicules_get_subresource"={"path"="/users/{id}/vehicules"}
  *      },

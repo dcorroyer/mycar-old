@@ -91,7 +91,7 @@ const MaintenancesPage = props => {
                         <th>Type</th>
                         <th className="text-center">Montant</th>
                         <th>Véhicule</th>
-                        <th></th>
+                        <th/>
                     </tr>
                 </thead>
                 <tbody>
