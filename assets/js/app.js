@@ -7,6 +7,7 @@ import AuthContext from './contexts/AuthContext';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import MaintenancesPage from './pages/MaintenancesPage';
+import RegisterPage from './pages/RegisterPage';
 import VehiculePage from './pages/VehiculePage';
 import VehiculesPage from './pages/VehiculesPage';
 import AuthAPI from './services/authAPI';
@@ -34,6 +35,7 @@ const App = () => {
                 <main className="container pt-5">
                     <Switch>
                         <Route path='/login' component={LoginPage} />
+                        <Route path='/register' component={RegisterPage} />
                         <PrivateRoute path='/maintenances' component={MaintenancesPage} />
                         <PrivateRoute path='/vehicules/:id' component={VehiculePage} />
                         <PrivateRoute path='/vehicules' component={VehiculesPage} />
