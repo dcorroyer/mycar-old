@@ -9,7 +9,7 @@ const LoginPage = ({ history }) => {
     const { setIsAuthenticated } = useContext(AuthContext);
 
     const [credentials, setCredentials] = useState({
-        username: "ben21@kessler.com",
+        username: "",
         password: ""
     });
     const [error, setError] = useState("");

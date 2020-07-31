@@ -9,7 +9,7 @@
     "license": "UNLICENSED",
     "private": true,
     "scripts": {
-        "dev-server": "encore dev-server --https --pfx=$HOME/.symfony/certs/default.p12 --port 8080",
+        "dev-server": "encore dev-server --https --pfx=%UserProfile%\\.symfony\\certs\\default.p12 --port 8080",
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress"
