@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter, Route, Switch, withRouter } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 import Navbar from './components/Navbar';
 import PrivateRoute from './components/PrivateRoute';
 import AuthContext from './contexts/AuthContext';
@@ -11,6 +12,7 @@ import RegisterPage from './pages/RegisterPage';
 import VehiculePage from './pages/VehiculePage';
 import VehiculesPage from './pages/VehiculesPage';
 import AuthAPI from './services/authAPI';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 require("../css/app.css");
@@ -43,6 +45,7 @@ const App = () => {
                     </Switch>
                 </main>
             </HashRouter>
+            <ToastContainer position={toast.POSITION.TOP_CENTER}/>
         </AuthContext.Provider>
     );
 };

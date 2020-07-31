@@ -37,12 +37,14 @@ const RegisterPage = ({ history }) => {
             apiErrors.password = "Les mots de passe ne correspondent pas";
             apiErrors.passwordConfirm = "Les mots de passe ne correspondent pas";
             setErrors(apiErrors);
+            toast.error("Les mots de passe ne correspondent pas !");
             return;
         }
 
         try {
             await UsersAPI.register(user);
             setErrors({});
+            toast.success("Vous êtes désormais inscrit, vous pouvez vous connecter !");
             history.replace("/login");
         } catch (error) {
             const { violations } = error.response.data;
@@ -53,8 +55,8 @@ const RegisterPage = ({ history }) => {
                 });
                 setErrors(apiErrors);
             }
+            toast.error("Une erreur est survenue !");
         }
-        console.log(user);
     };
 
     return ( 

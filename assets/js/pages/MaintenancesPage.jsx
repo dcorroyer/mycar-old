@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import Pagination from '../components/Pagination';
 import MaintenancesAPI from '../services/maintenancesAPI';
+import { toast } from 'react-toastify';
+import TableLoader from '../components/loaders/TableLoader';
 
 
 const MaintenancesPage = props => {
@@ -9,14 +11,16 @@ const MaintenancesPage = props => {
     const [maintenances, setMaintenances] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [search, setSearch] = useState("");
+    const [loading, setLoading] = useState(true);
 
     //Récupération des maintenances
     const fetchMaintenances = async () => {
         try {
             const data = await MaintenancesAPI.findAll();
             setMaintenances(data);
+            setLoading(false);
         } catch (error) {
-            console.log(error.response);
+            toast.error("Une erreur est survenue lors du chargement des maintenances !");
         }
     };
 
@@ -32,7 +36,9 @@ const MaintenancesPage = props => {
 
         try {
             await MaintenancesAPI.delete(id);
+            toast.success("La maintenance a été supprimée !");
         } catch (error) {
+            toast.error("Une erreur est survenue !");
             setMaintenances(originalMaintenances);
         }
     };
@@ -94,7 +100,7 @@ const MaintenancesPage = props => {
                         <th/>
                     </tr>
                 </thead>
-                <tbody>
+                {!loading && <tbody>
                     {paginatedMaintenances.map(maintenance =>
                         <tr key={maintenance.id}>
                             <td>{maintenance.chrono}</td>
@@ -119,8 +125,10 @@ const MaintenancesPage = props => {
                             </td>
                         </tr>
                     )}
-                </tbody>
+                </tbody> }
             </table>
+
+            {loading && <TableLoader />}
 
             {itemsPerPage < filteredMaintenances.length &&
                 <Pagination 

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from '../components/Pagination';
 import VehiculesAPI from '../services/vehiculesAPI';
+import { toast } from 'react-toastify';
+import TableLoader from '../components/loaders/TableLoader';
 
 
 const VehiculesPage = props => {
@@ -9,14 +11,16 @@ const VehiculesPage = props => {
     const [vehicules, setVehicules] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [search, setSearch] = useState("");
+    const [loading, setLoading] = useState(true);
 
     //Récupération des véhicules
     const fetchVehicules = async () => {
         try {
             const data = await VehiculesAPI.findAll();
             setVehicules(data);
+            setLoading(false);
         } catch (error) {
-            console.log(error.response);
+            toast.error("Une erreur est survenue lors du chargement des véhicules !");
         }
     };
 
@@ -32,7 +36,9 @@ const VehiculesPage = props => {
 
         try {
             await VehiculesAPI.delete(id);
+            toast.success("Le véhicule a été supprimé !");
         } catch (error) {
+            toast.error("Une erreur est survenue !");
             setVehicules(originalVehicules);
         }
     };
@@ -95,7 +101,7 @@ const VehiculesPage = props => {
                         <th />
                     </tr>
                 </thead>
-                <tbody>
+                {!loading && <tbody>
                     {paginatedVehicules.map(vehicule => 
                         <tr key={vehicule.id}>
                             <td>{vehicule.id}</td>
@@ -120,8 +126,10 @@ const VehiculesPage = props => {
                             </td>
                         </tr>
                     )}
-                </tbody>
+                </tbody> }
             </table>
+            
+            {loading && <TableLoader />}
 
             {itemsPerPage < filteredVehicules.length && 
                 <Pagination 

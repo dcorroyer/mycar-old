@@ -1,7 +1,8 @@
-import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import Field from '../components/forms/Field';
+import FormContentLoader from '../components/loaders/FormContentLoader';
 import VehiculesAPI from "../services/vehiculesAPI";
 
 
@@ -26,13 +27,16 @@ const VehiculePage = ({ match, history }) => {
     });
 
     const [editing, setEditing] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     // Récupération du véhicule en fonction de l'identifiant
     const fetchVehicule = async id => {
         try {
             const { type, brand, reference, modelyear, identification } = await VehiculesAPI.find(id);
             setVehicule({ type, brand, reference, modelyear, identification });
+            setLoading(false);
         } catch (error) {
+            toast.error("Une erreur est survenue !");
             history.replace('/vehicules');
         }
     };
@@ -40,6 +44,7 @@ const VehiculePage = ({ match, history }) => {
     // Chargement du véhicule en fonction de l'identifiant
     useEffect(() => {
         if (id !== "new") {
+            setLoading(true);
             setEditing(true);
             fetchVehicule(id);
         }
@@ -56,13 +61,15 @@ const VehiculePage = ({ match, history }) => {
         event.preventDefault();
 
         try {
+            setErrors({});
             if (editing) {
                 await VehiculesAPI.update(id, vehicule);
+                toast.success("Le véhicule a bien été modifié !");
             } else {
                 await VehiculesAPI.create(vehicule);
+                toast.success("Le véhicule a bien été créé !");
                 history.replace("/vehicules");
             }
-            setErrors({});
         } catch ({ response }) {
             const { violations } = response.data;
 
@@ -72,6 +79,7 @@ const VehiculePage = ({ match, history }) => {
                     apiErrors[propertyPath] = message;
                 });
                 setErrors(apiErrors);
+                toast.error("Une erreur est survenue !");
             }
         }
     };
@@ -80,7 +88,8 @@ const VehiculePage = ({ match, history }) => {
         <>
             {(!editing && <h1>Création d'un véhicule!</h1>) || (<h1>Modification du véhicule!</h1>)}
 
-            <form onSubmit={handleSubmit}>
+            {loading && <FormContentLoader />}
+            {!loading && <form onSubmit={handleSubmit}>
                 <Field 
                     name="type" 
                     label="Type" 
@@ -130,7 +139,7 @@ const VehiculePage = ({ match, history }) => {
                         Retour à la liste
                     </Link>
                 </div>
-            </form>
+            </form> }
         </>
     );
 };
