@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Field from '../components/forms/Field';
 import { Link } from 'react-router-dom';
 import UsersAPI from '../services/usersAPI';
+import { toast } from "react-toastify";
 
 
 const RegisterPage = ({ history }) => {
@@ -39,23 +40,23 @@ const RegisterPage = ({ history }) => {
             setErrors(apiErrors);
             toast.error("Les mots de passe ne correspondent pas !");
             return;
-        }
+        } else {
+            try {
+                await UsersAPI.register(user);
+                setErrors({});
+                toast.success("Vous êtes désormais inscrit, vous pouvez vous connecter !");
+                history.replace("/login");
+            } catch (error) {
+                const { violations } = error.response.data;
 
-        try {
-            await UsersAPI.register(user);
-            setErrors({});
-            toast.success("Vous êtes désormais inscrit, vous pouvez vous connecter !");
-            history.replace("/login");
-        } catch (error) {
-            const { violations } = error.response.data;
-
-            if (violations) {
-                violations.forEach(violation => {
-                    apiErrors[violation.propertyPath] = violation.message
-                });
-                setErrors(apiErrors);
+                if (violations) {
+                    violations.forEach(violation => {
+                        apiErrors[violation.propertyPath] = violation.message
+                    });
+                    setErrors(apiErrors);
+                }
+                toast.error("Une erreur est survenue !");
             }
-            toast.error("Une erreur est survenue !");
         }
     };
 

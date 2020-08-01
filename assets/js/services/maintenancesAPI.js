@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cache from './cache';
+import { MAINTENANCES_API } from '../config';
 
 
 async function findAll() {
@@ -8,7 +9,7 @@ async function findAll() {
     if (cachedMaintenances) return cachedMaintenances;
 
     return axios
-        .get("http://localhost:8000/api/maintenances")
+        .get(MAINTENANCES_API)
         .then(response => {
             const maintenances = response.data['hydra:member'];
             Cache.set("maintenances", maintenances);
@@ -22,7 +23,7 @@ async function find(id) {
     if (cachedMaintenance) return cachedMaintenance;
 
     return axios
-        .get("http://localhost:8000/api/maintenances/" + id)
+        .get(MAINTENANCES_API + "/" + id)
         .then(response => {
             const maintenance = response.data;
             Cache.set("maintenances." + id, maintenance);
@@ -32,7 +33,7 @@ async function find(id) {
 
 function create(maintenance) {
     return axios
-        .post("http://localhost:8000/api/maintenances",
+        .post(MAINTENANCES_API,
         { ...maintenance, vehicule: `/api/vehicules/${maintenance.vehicule}` })
         .then(async response => {
             const cachedMaintenances = await Cache.get("maintenances");
@@ -45,7 +46,7 @@ function create(maintenance) {
 
 function update(id, maintenance) {
     return axios
-        .put("http://localhost:8000/api/maintenances/" + id,
+        .put(MAINTENANCES_API + "/" + id,
         { ...maintenance, vehicule: `/api/vehicules/${maintenance.vehicule}` })
         .then(async response => {
             const cachedMaintenances = await Cache.get("maintenances");
@@ -65,7 +66,7 @@ function update(id, maintenance) {
 
 function deleteMaintenance(id) {
     return axios
-        .delete("http://localhost:8000/api/maintenances/" + id)
+        .delete(MAINTENANCES_API + "/" + id)
         .then(async response => {
             const cachedMaintenances = await Cache.get("maintenances");
             if (cachedMaintenances) {
