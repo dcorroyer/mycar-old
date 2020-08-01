@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Field from '../components/forms/Field';
 import FormContentLoader from '../components/loaders/FormContentLoader';
-import VehiculesAPI from "../services/vehiculesAPI";
+import VehiculesAPI from '../services/vehiculesAPI';
 
 
 const VehiculePage = ({ match, history }) => {
@@ -86,7 +86,11 @@ const VehiculePage = ({ match, history }) => {
 
     return (
         <>
-            {(!editing && <h1>Création d'un véhicule!</h1>) || (<h1>Modification du véhicule!</h1>)}
+            {(!editing && 
+                <h1>Création d'un véhicule!</h1>
+                ) || (
+                <h1>Modification du véhicule!</h1>
+            )}
 
             {loading && <FormContentLoader />}
             {!loading && <form onSubmit={handleSubmit}>

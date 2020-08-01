@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import Pagination from '../components/Pagination';
-import MaintenancesAPI from '../services/maintenancesAPI';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import TableLoader from '../components/loaders/TableLoader';
+import Pagination from '../components/Pagination';
+import MaintenancesAPI from '../services/maintenancesAPI';
 
 
 const MaintenancesPage = props => {
@@ -77,7 +78,10 @@ const MaintenancesPage = props => {
 
     return ( 
         <>
-            <h1>Liste des maintenances</h1>
+            <div className="mb-3 d-flex justify-content-between align-items-center">
+                <h1>Liste des maintenances</h1>
+                <Link to="/maintenances/new" className="btn btn-primary">Créer une maintenance</Link>
+            </div>
 
             <div className="form-group">
                 <input 
@@ -114,9 +118,11 @@ const MaintenancesPage = props => {
                                 {maintenance.vehicule.reference}
                             </td>
                             <td>
-                                <button className="btn btn-sm btn-primary mr-1">
-                                    Modifier
-                                </button>
+                                <Link 
+                                    to={"/maintenances/" + maintenance.id} 
+                                    className="btn btn-sm btn-primary mr-1">
+                                        Modifier
+                                </Link>
                                 <button 
                                     onClick={() => handleDelete(maintenance.id)}
                                     className="btn btn-sm btn-danger">

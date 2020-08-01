@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter, Route, Switch, withRouter } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Navbar from './components/Navbar';
 import PrivateRoute from './components/PrivateRoute';
 import AuthContext from './contexts/AuthContext';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
+import MaintenancePage from './pages/MaintenancePage';
 import MaintenancesPage from './pages/MaintenancesPage';
 import RegisterPage from './pages/RegisterPage';
 import VehiculePage from './pages/VehiculePage';
 import VehiculesPage from './pages/VehiculesPage';
 import AuthAPI from './services/authAPI';
-import 'react-toastify/dist/ReactToastify.css';
 
 
 require("../css/app.css");
@@ -38,6 +39,7 @@ const App = () => {
                     <Switch>
                         <Route path='/login' component={LoginPage} />
                         <Route path='/register' component={RegisterPage} />
+                        <PrivateRoute path='/maintenances/:id' component={MaintenancePage} />
                         <PrivateRoute path='/maintenances' component={MaintenancesPage} />
                         <PrivateRoute path='/vehicules/:id' component={VehiculePage} />
                         <PrivateRoute path='/vehicules' component={VehiculesPage} />

@@ -117,6 +117,11 @@ const VehiculesPage = props => {
                             </td>
                             <td className="text-center">{vehicule.totalAmount.toLocaleString()} €</td>
                             <td>
+                                <Link 
+                                    to={"/vehicules/" + vehicule.id} 
+                                    className="btn btn-sm btn-primary mr-1">
+                                        Modifier
+                                </Link>
                                 <button
                                     onClick={() => handleDelete(vehicule.id)}
                                     disabled={vehicule.maintenances.length > 0} 
