@@ -65,6 +65,7 @@ const VehiculePage = ({ match, history }) => {
             if (editing) {
                 await VehiculesAPI.update(id, vehicule);
                 toast.success("Le véhicule a bien été modifié !");
+                history.replace("/vehicules");
             } else {
                 await VehiculesAPI.create(vehicule);
                 toast.success("Le véhicule a bien été créé !");

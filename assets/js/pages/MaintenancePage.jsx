@@ -1,10 +1,12 @@
+import moment from 'moment';
 import React, { useState, useEffect } from 'react';
 import Field from '../components/forms/Field';
 import Select from '../components/forms/Select';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import VehiculesAPI from '../services/vehiculesAPI';
 import MaintenancesAPI from '../services/maintenancesAPI';
-import axios from 'axios';
+import FormContentLoader from '../components/loaders/FormContentLoader';
 
 
 const MaintenancePage = ({ match, history }) => {
@@ -29,14 +31,17 @@ const MaintenancePage = ({ match, history }) => {
     const [editing, setEditing] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    //Gestion du format de la date avec moment
+    //const formatDate = str => moment(str).format('YYYY/MM/DD');
+
     // Récupération des véhicules
     const fetchVehicules = async () => {
         try {
             const data = await VehiculesAPI.findAll();
             setVehicules(data);
-
             if (!maintenance.vehicule) setMaintenance({ ...maintenance, vehicule: data[0].id });
         } catch (error) {
+            toast.error("Une erreur est survenue !");
             history.replace("/maintenances");
         }
     };
@@ -46,7 +51,9 @@ const MaintenancePage = ({ match, history }) => {
         try {
             const { date, type, amount, vehicule } = await MaintenancesAPI.find(id);
             setMaintenance({ date, type, amount, vehicule: vehicule.id });
+            setLoading(false);
         } catch (error) {
+            toast.error("Une erreur est survenue !");
             history.replace("/maintenances");
         }
     };
@@ -59,6 +66,7 @@ const MaintenancePage = ({ match, history }) => {
     // Chargement d'une maintenance en fonction de l'identifiant
     useEffect(() => {
         if (id !== "new") {
+            setLoading(true);
             setEditing(true);
             fetchMaintenance(id);
         }
@@ -75,11 +83,14 @@ const MaintenancePage = ({ match, history }) => {
         event.preventDefault();
 
         try {
+            setErrors({});
             if (editing) {
                 await MaintenancesAPI.update(id, maintenance);
+                toast.success("La maintenance a bien été modifié !");
                 history.replace("/maintenances");
             } else {
                 await MaintenancesAPI.create(maintenance);
+                toast.success("La maintenance a bien été créé !");
                 history.replace("/maintenances");
             }
         } catch ({ response }) {
@@ -91,6 +102,7 @@ const MaintenancePage = ({ match, history }) => {
                     apiErrors[propertyPath] = message;
                 });
                 setErrors(apiErrors);
+                toast.error("Une erreur est survenue !");
             }
         }
     };
@@ -102,8 +114,9 @@ const MaintenancePage = ({ match, history }) => {
                 ) || (
                 <h1>Modification de la maintenance!</h1>
             )}
-            
-            <form onSubmit={handleSubmit}>
+
+            {loading && <FormContentLoader />}
+            {!loading && <form onSubmit={handleSubmit}>
                 <Field
                     name="date"
                     type="date"
@@ -155,9 +168,9 @@ const MaintenancePage = ({ match, history }) => {
                         Retour à la liste
                     </Link>
                 </div>
-            </form>
+            </form> }
         </>
     );
-}
+};
  
 export default MaintenancePage;
