@@ -1,13 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import Field from '../components/forms/Field';
 import FormContentLoader from '../components/loaders/FormContentLoader';
 import VehiculesAPI from '../services/vehiculesAPI';
-import TableLoader from "../components/loaders/TableLoader";
-import Pagination from "../components/Pagination";
 import moment from "moment";
-
 
 const VehiculeShowPage = ({match, history}) => {
 
@@ -46,13 +42,50 @@ const VehiculeShowPage = ({match, history}) => {
     //Gestion du format de la date
     const formatDate = str => moment(str).format('DD/MM/YYYY');
 
+    //Gestion du format de la date avec moment
+    const formatDateYear = str => moment(str).format('YYYY');
+
     return (
         <>
+            <h1>Informations du véhicule</h1>
+
+            {loading && <FormContentLoader/>}
+
+            {vehicule &&
+            <div>
+                <table className="table table-hover">
+                    <tbody>
+                    <tr>
+                        <td>Type du véhicule :</td>
+                        <td>{vehicule.type}</td>
+                    </tr>
+                    <tr>
+                        <td>Marque du véhicule :</td>
+                        <td>{vehicule.brand}</td>
+                    </tr>
+                    <tr>
+                        <td>Modèle du véhicule :</td>
+                        <td>{vehicule.reference}</td>
+                    </tr>
+                    <tr>
+                        <td>Année du véhicule :</td>
+                        <td>{formatDateYear(vehicule.modelyear)}</td>
+                    </tr>
+                    <tr>
+                        <td>Immatriculation du véhicule :</td>
+                        <td>{vehicule.identification}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            }
+
             {vehicule.maintenances &&
             <div>
                 <div className="mb-3 d-flex justify-content-between align-items-center">
-                    <h1>Liste des maintenances</h1>
-                    <Link to="/maintenances/new" className="btn btn-primary">Créer une maintenance</Link>
+                    <h3>Liste des maintenances</h3>
+                    <Link to="/maintenances/new" className="btn btn-primary">Ajouter une maintenance</Link>
                 </div>
 
                 <table className="table table-hover">
