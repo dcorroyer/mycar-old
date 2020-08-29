@@ -4,6 +4,7 @@ import Pagination from '../components/Pagination';
 import VehiculesAPI from '../services/vehiculesAPI';
 import { toast } from 'react-toastify';
 import TableLoader from '../components/loaders/TableLoader';
+import moment from "moment";
 
 
 const VehiculesPage = props => {
@@ -70,6 +71,9 @@ const VehiculesPage = props => {
         itemsPerPage
     );
 
+    //Gestion du format de la date avec moment
+    const formatDate = str => moment(str).format('YYYY');
+
     return ( 
         <>
             <div className="mb-3 d-flex justify-content-between align-items-center">
@@ -108,7 +112,7 @@ const VehiculesPage = props => {
                             <td>{vehicule.type}</td>
                             <td>{vehicule.brand}</td>
                             <td>{vehicule.reference}</td>
-                            <td>{vehicule.modelyear}</td>
+                            <td>{formatDate(vehicule.modelyear)}</td>
                             <td>{vehicule.identification}</td>
                             <td className="text-center">
                                 <span className="badge badge-dark">
