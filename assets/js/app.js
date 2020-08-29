@@ -42,8 +42,8 @@ const App = () => {
                         <Route path='/register' component={RegisterPage} />
                         <PrivateRoute path='/maintenances/:id' component={MaintenancePage} />
                         <PrivateRoute path='/maintenances' component={MaintenancesPage} />
-                        <PrivateRoute path='/vehicules/:id' component={VehiculePage} />
                         <PrivateRoute path='/vehicules/show/:id' component={VehiculeShowPage} />
+                        <PrivateRoute path='/vehicules/:id' component={VehiculePage} />
                         <PrivateRoute path='/vehicules' component={VehiculesPage} />
                         <Route path='/' component={HomePage} />
                     </Switch>
