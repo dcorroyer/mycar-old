@@ -14,6 +14,7 @@ import RegisterPage from './pages/RegisterPage';
 import VehiculePage from './pages/VehiculePage';
 import VehiculesPage from './pages/VehiculesPage';
 import AuthAPI from './services/authAPI';
+import VehiculeShowPage from "./pages/VehiculeShowPage";
 
 
 require("../css/app.css");
@@ -42,6 +43,7 @@ const App = () => {
                         <PrivateRoute path='/maintenances/:id' component={MaintenancePage} />
                         <PrivateRoute path='/maintenances' component={MaintenancesPage} />
                         <PrivateRoute path='/vehicules/:id' component={VehiculePage} />
+                        <PrivateRoute path='/vehicules/show/:id' component={VehiculeShowPage} />
                         <PrivateRoute path='/vehicules' component={VehiculesPage} />
                         <Route path='/' component={HomePage} />
                     </Switch>

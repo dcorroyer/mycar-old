@@ -94,7 +94,6 @@ const VehiculesPage = props => {
             <table className="table table-hover">
                 <thead>
                     <tr>
-                        <th>Id.</th>
                         <th>Type</th>
                         <th>Marque</th>
                         <th>Modèle</th>
@@ -106,9 +105,8 @@ const VehiculesPage = props => {
                     </tr>
                 </thead>
                 {!loading && <tbody>
-                    {paginatedVehicules.map(vehicule => 
+                    {paginatedVehicules.map(vehicule =>
                         <tr key={vehicule.id}>
-                            <td>{vehicule.id}</td>
                             <td>{vehicule.type}</td>
                             <td>{vehicule.brand}</td>
                             <td>{vehicule.reference}</td>
@@ -121,14 +119,19 @@ const VehiculesPage = props => {
                             </td>
                             <td className="text-center">{vehicule.totalAmount.toLocaleString()} €</td>
                             <td>
-                                <Link 
-                                    to={"/vehicules/" + vehicule.id} 
+                                <Link
+                                    to={"/vehicules/show/" + vehicule.id}
+                                    className="btn btn-sm btn-primary mr-1">
+                                    Voir
+                                </Link>
+                                <Link
+                                    to={"/vehicules/" + vehicule.id}
                                     className="btn btn-sm btn-primary mr-1">
                                         Modifier
                                 </Link>
                                 <button
                                     onClick={() => handleDelete(vehicule.id)}
-                                    disabled={vehicule.maintenances.length > 0} 
+                                    disabled={vehicule.maintenances.length > 0}
                                     className="btn btn-sm btn-danger">
                                         Supprimer
                                 </button>
