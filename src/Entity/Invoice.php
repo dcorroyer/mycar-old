@@ -41,10 +41,12 @@ class Invoice
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"invoices_read", "maintenances_read", "invoices_subresource"})
+     * @var MediaObject|null
+     *
+     * @ORM\ManyToOne(targetEntity=MediaObject::class)
+     * @ORM\JoinColumn(nullable=true)
      */
-    private $filename;
+    public $file;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Maintenance", inversedBy="invoices")
@@ -65,18 +67,6 @@ class Invoice
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getFilename(): ?string
-    {
-        return $this->filename;
-    }
-
-    public function setFilename(string $filename): self
-    {
-        $this->filename = $filename;
-
-        return $this;
     }
 
     public function getMaintenance(): ?Maintenance
@@ -112,4 +102,32 @@ class Invoice
 
         return $this;
     }
+
+    /**
+     * @return MediaObject|null
+     */
+    public function getFile(): ?MediaObject
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param MediaObject $file
+     */
+    public function setFile(MediaObject $file): void
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * @Groups({"maintenances_read"})
+     * @return string|null
+     */
+    public function getFilePath()
+    {
+        if ($this->file)
+            return $this->file->filePath;
+        return null;
+    }
+
 }
