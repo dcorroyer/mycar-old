@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          }
  *      },
  *      attributes={
- *          "order": {"date":"ASC"}
+ *          "order": {"date":"DESC"}
  *      },
  *      normalizationContext={
  *          "groups"={"maintenances_read"}
@@ -61,7 +61,7 @@ class Maintenance
     private $type;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Invoice", mappedBy="maintenance", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Invoice", mappedBy="maintenance", cascade={"remove"}, orphanRemoval=true)
      * @Groups({"maintenances_read"})
      * @ApiSubresource()
      */

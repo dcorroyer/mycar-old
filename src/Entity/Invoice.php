@@ -120,7 +120,7 @@ class Invoice
     }
 
     /**
-     * @Groups({"maintenances_read"})
+     * @Groups({"maintenances_read", "invoices_read", "invoices_subresource"})
      * @return string|null
      */
     public function getFilePath()

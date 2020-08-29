@@ -45,7 +45,7 @@ const App = () => {
                         <PrivateRoute path='/vehicules/show/:id' component={VehiculeShowPage} />
                         <PrivateRoute path='/vehicules/:id' component={VehiculePage} />
                         <PrivateRoute path='/vehicules' component={VehiculesPage} />
-                        <Route path='/' component={HomePage} />
+                        <PrivateRoute path='/' component={HomePage} />
                     </Switch>
                 </main>
             </HashRouter>

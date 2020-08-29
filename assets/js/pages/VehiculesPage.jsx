@@ -121,7 +121,7 @@ const VehiculesPage = props => {
                             <td>
                                 <Link
                                     to={"/vehicules/show/" + vehicule.id}
-                                    className="btn btn-sm btn-primary mr-1">
+                                    className="btn btn-sm btn-info mr-1">
                                     Voir
                                 </Link>
                                 <Link

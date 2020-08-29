@@ -47,7 +47,7 @@ function update(id, maintenance) {
 
 function deleteFile(id) {
     return axios
-        .delete(FILE_API + "/" + id)
+        .delete(id)
         .then(async response => {
             return response;
         });

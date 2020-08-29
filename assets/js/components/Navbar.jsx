@@ -1,25 +1,28 @@
-import React, { useContext } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, {useContext} from 'react';
+import {NavLink} from 'react-router-dom';
 import AuthContext from '../contexts/AuthContext';
 import AuthAPI from '../services/authAPI';
-import { toast } from 'react-toastify';
+import {toast} from 'react-toastify';
 
 
-const Navbar = ({ history }) => {
+const Navbar = ({history}) => {
 
-    const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+    const {isAuthenticated, setIsAuthenticated} = useContext(AuthContext);
 
     const handleLogout = () => {
-        AuthAPI.logout();
-        setIsAuthenticated(false);
-        toast.info("Vous êtes déconnecté !");
-        history.push("/");
+        if (confirm("Voulez-vous vous déconnecter ?")) {
+            AuthAPI.logout();
+            setIsAuthenticated(false);
+            toast.info("Vous êtes déconnecté !");
+            history.push("/");
+        }
     };
 
-    return ( 
+    return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <NavLink className="navbar-brand" to="/">Maintain Your Car</NavLink>
-            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03"
+                    aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"/>
             </button>
 
@@ -37,7 +40,7 @@ const Navbar = ({ history }) => {
                     </li>
                 </ul>
                 <ul className="navbar-nav ml-auto">
-                    {(!isAuthenticated && ( 
+                    {(!isAuthenticated && (
                         <>
                             <li className="nav-item">
                                 <NavLink className="nav-link" to="/register">
@@ -56,11 +59,11 @@ const Navbar = ({ history }) => {
                                 Déconnexion
                             </button>
                         </li>
-                    )}                
+                    )}
                 </ul>
             </div>
         </nav>
-     );
+    );
 };
- 
+
 export default Navbar;
