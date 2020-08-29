@@ -47,7 +47,14 @@ const VehiculeShowPage = ({match, history}) => {
 
     return (
         <>
-            <h1>Informations du véhicule</h1>
+            <div className="mb-3 d-flex justify-content-between align-items-center">
+                <h1>Informations du véhicule</h1>
+                <Link
+                    to={"/vehicules/" + id}
+                    className="btn btn-primary mr-1">
+                    Modifier
+                </Link>
+            </div>
 
             {loading && <FormContentLoader/>}
 
