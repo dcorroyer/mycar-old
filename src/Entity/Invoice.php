@@ -43,8 +43,8 @@ class Invoice
     /**
      * @var MediaObject|null
      *
-     * @ORM\ManyToOne(targetEntity=MediaObject::class)
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\OneToOne(targetEntity=MediaObject::class, cascade={"remove"})
+     * @ORM\JoinColumn(name="file_id", referencedColumnName="id")
      */
     public $file;
 
