@@ -18,7 +18,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VehiculeRepository")
  * @UniqueEntity("identification", message="Un véhicule ayant cette immatriculation existe déjà")
- *
  * @ApiResource(
  *      collectionOperations={"GET", "POST"},
  *      itemOperations={"GET", "PUT", "DELETE"},

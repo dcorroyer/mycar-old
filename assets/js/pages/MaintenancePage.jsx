@@ -39,9 +39,6 @@ const MaintenancePage = ({match, history}) => {
     const [files, setFiles] = useState([]);
     const [invoices, setInvoices] = useState([]);
 
-    //Gestion du format de la date avec moment
-    //const formatDate = str => moment(str).format('YYYY/MM/DD');
-
     // Récupération des véhicules
     const fetchVehicules = async () => {
         try {
@@ -53,7 +50,6 @@ const MaintenancePage = ({match, history}) => {
             history.replace("/maintenances");
         }
     };
-
 
     //Gestion du format de la date avec moment
     const formatDate = str => moment(str).format('YYYY-MM-DD');
@@ -121,7 +117,10 @@ const MaintenancePage = ({match, history}) => {
                 toast.success("La maintenance a bien été modifié !");
                 history.replace("/maintenances");
             } else {
-                let result = await MaintenancesAPI.create(maintenance);
+                let data = {...maintenance};
+                delete data.id;
+
+                let result = await MaintenancesAPI.create(data);
                 files.map(async file => {
                     await InvoicesAPI.create({maintenance: result.data["@id"], file: file["@id"]})
                 })
