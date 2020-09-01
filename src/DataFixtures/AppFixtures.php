@@ -75,7 +75,7 @@ class AppFixtures extends Fixture
 
                     for($i = 0; $i < mt_rand(1 , 3); $i++) {
                         $invoice = new Invoice();
-                        $invoice->setFilename($faker->text)
+                        $invoice
                             ->setMaintenance($maintenance)
                             ->setChrono($chrono_invoices);
 
