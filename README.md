@@ -1,28 +1,51 @@
-# Configuration of webpack for linux or windows
+# How to build a Symfony - Webpack app
 
-Make sure you have run this command before configuration:
-    
-    symfony server:start
+## Installation:
 
-This command was important to create symfony certs, now you can run:
+You have to clone this repository and make:
 
-    symfony server:start --no-tls
+    docker-compose up -d
 
-## Package.json
+If you have any denied permission, make sudo
 
-Now you have to make modification in your **package.json** to enable symfony certs in your project running on linux or windows with local API:
+The command will download and install docker images to make your containers
 
-### For linux development with lamp:
+When it is done, you'll have these containers
 
-    "dev-server": "encore dev-server --https --pfx=$HOME/.symfony/certs/default.p12 --port 8080",
+    php74-container
+    node-container
+    mysql-container
+    nginx-container
 
-### For windows development with xampp:
+You can access all your containers with this command:
 
-    "dev-server": "encore dev-server --https --pfx=%UserProfile%\\.symfony\\certs\\default.p12 --port 8080",
+    docker exec -it **yourcontainer** bash
 
+Now, if you want to create your Symfony 5 app, you have to connect to the php container:
 
-Now you can run:
+    docker exec -it php74-container bash
 
-    npm install
-    npm run build
-    npm run dev-server
+In your container, you'll be in your working folder, you just have to create the project (will be built in the app folder):
+
+    composer create-project symfony/website-skeleton .
+
+In the case of Symfony/React app you can install bundles in the container:
+
+    composer req encore
+    composer req api
+
+Now your project is up. GREAT !
+
+## Services
+
+You need to use **services** to use php and yarn in your containers and you didn't need to connect any container to use them, stay in your primary folder:
+
+    docker-compose run --rm php74-service php bin/console d:d:c (to create database)
+    docker-compose run --rm node-service yarn install (to install nodejs dependencies)
+    docker-compose run --rm node-service yarn dev (to run webpack)
+
+A Makefile is up to provide some short commands to help you.
+
+If you can't modify any file in the app folder, you can run this command in the php container:
+
+    chmod -R 777 .
