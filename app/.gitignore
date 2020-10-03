@@ -15,6 +15,12 @@
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
 
+###> lexik/jwt-authentication-bundle ###
+#/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###
+
+### fix .idea ###
+.idea/
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
 /public/build/
