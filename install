@@ -29,5 +29,8 @@ fi
 
 docker-compose run --rm php8-service composer install
 docker-compose run --rm php8-service php bin/console d:d:c
+docker-compose run --rm php8-service php bin/console d:s:u --force
+
+sudo chmod -R 777 .
 
 echo "process finished"
