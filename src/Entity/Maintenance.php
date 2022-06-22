@@ -55,7 +55,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 class Maintenance
 {
-    const TYPE = [
+    public const TYPE = [
         'MAINTENANCE' => 'maintenance',
         'REPAIR'      => 'repair',
         'RESTORATION' => 'restoration'

@@ -57,7 +57,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 class Vehicule
 {
-    const TYPE = [
+    public const TYPE = [
         'CAR'        => 'car',
         'MOTORCYCLE' => 'motorcycle',
         'SCOOTER'    => 'scooter'

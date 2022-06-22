@@ -13,13 +13,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity("email", message: "A user with this email address already exists")]
 #[ApiResource(
     collectionOperations: [
-        'GET',
+        'GET' => ['security' => 'is_granted("ROLE_ADMIN")'],
         'POST'
     ],
     itemOperations: [
@@ -53,7 +55,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'firstname'
     ]
 )]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -80,6 +82,9 @@ class User
     #[ORM\Column(type: 'datetime')]
     #[Groups(['read:user:item'])]
     private ?DateTime $createdAt;
+
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Vehicule::class)]
     #[Groups(['read:user:item', 'read:user:collection'])]
@@ -158,6 +163,7 @@ class User
     }
 
     /**
+     * @see PasswordAuthenticatedUserInterface
      * @return string|null
      */
     public function getPassword(): ?string
@@ -191,6 +197,25 @@ class User
     public function setCreatedAt(DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
 
         return $this;
     }
@@ -231,5 +256,22 @@ class User
         }
 
         return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
     }
 }
