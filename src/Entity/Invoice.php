@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\InvoiceRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: InvoiceRepository::class)]
 #[ApiResource(
@@ -35,15 +36,24 @@ class Invoice
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(['read:invoice:item', 'read:invoice:collection', 'write:invoice:item'])]
+    #[
+        Assert\NotBlank(),
+        Assert\Length(max: 255)
+    ]
     private ?string $file;
 
     #[ORM\ManyToOne(targetEntity: Maintenance::class, inversedBy: 'invoices')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['read:invoice:item', 'read:invoice:collection', 'write:invoice:item'])]
+    #[Assert\NotBlank()]
     private ?Maintenance $maintenance;
 
     #[ORM\Column(type: 'integer')]
     #[Groups(['read:invoice:item', 'read:invoice:collection'])]
+    #[
+        Assert\NotBlank(),
+        Assert\Type('integer')
+    ]
     private ?int $chrono;
 
     /**

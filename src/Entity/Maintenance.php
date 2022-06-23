@@ -69,35 +69,51 @@ class Maintenance
 
     #[ORM\Column(type: 'string', length: 100)]
     #[Groups(['read:maintenance:item', 'read:maintenance:collection', 'write:maintenance:item'])]
-    #[Assert\Choice(
-        choices: [
-            Maintenance::TYPE['MAINTENANCE'],
-            Maintenance::TYPE['REPAIR'],
-            Maintenance::TYPE['RESTORATION']
-        ]
-    )]
+    #[
+        Assert\NotBlank(),
+        Assert\Choice(
+            choices: [
+                Maintenance::TYPE['MAINTENANCE'],
+                Maintenance::TYPE['REPAIR'],
+                Maintenance::TYPE['RESTORATION']
+            ]
+        )
+    ]
     private ?string $type;
 
     #[ORM\Column(type: 'date')]
     #[Groups(['read:maintenance:item', 'read:maintenance:collection', 'write:maintenance:item'])]
-    #[Assert\Type('DateTime')]
+    #[
+        Assert\NotBlank(),
+        Assert\Type('DateTime')
+    ]
     private ?DateTimeInterface $date;
 
     #[ORM\Column(type: 'float')]
     #[Groups(['read:maintenance:item', 'read:maintenance:collection', 'write:maintenance:item'])]
+    #[
+        Assert\NotBlank(),
+        Assert\Type('float')
+    ]
     private ?float $amount;
 
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: 'text')]
     #[Groups(['read:maintenance:item', 'write:maintenance:item'])]
+    #[Assert\NotBlank()]
     private ?string $description;
 
     #[ORM\Column(type: 'datetime')]
     #[Groups(['read:maintenance:item'])]
+    #[
+        Assert\NotBlank(),
+        Assert\Date()
+    ]
     private ?DateTime $createdAt;
 
     #[ORM\ManyToOne(targetEntity: Vehicule::class, inversedBy: 'maintenances')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['read:maintenance:item', 'read:maintenance:collection', 'write:maintenance:item'])]
+    #[Assert\NotBlank()]
     private ?Vehicule $vehicule;
 
     #[ORM\OneToMany(mappedBy: 'maintenance', targetEntity: Invoice::class, orphanRemoval: true)]

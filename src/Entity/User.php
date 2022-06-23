@@ -15,7 +15,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity("email", message: "A user with this email address already exists")]
@@ -65,22 +67,44 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'string', length: 100)]
     #[Groups(['write:user:item', 'read:user:item', 'read:user:collection'])]
+    #[
+        Assert\NotBlank(),
+        Assert\Length(min: 2, max: 100)
+    ]
     private ?string $lastname;
 
     #[ORM\Column(type: 'string', length: 100)]
     #[Groups(['write:user:item', 'read:user:item', 'read:user:collection'])]
+    #[
+        Assert\NotBlank(),
+        Assert\Length(min: 2, max: 100)
+    ]
     private ?string $firstname;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(['write:user:item', 'read:user:item', 'read:user:collection'])]
+    #[
+        Assert\NotBlank(),
+        Assert\Length(max: 255),
+        Assert\Email()
+    ]
     private ?string $email;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(['write:user:item'])]
+    #[
+        Assert\NotBlank(),
+        Assert\Length(max: 255),
+        SecurityAssert\UserPassword()
+    ]
     private ?string $password;
 
     #[ORM\Column(type: 'datetime')]
     #[Groups(['read:user:item'])]
+    #[
+        Assert\NotBlank(),
+        Assert\Date()
+    ]
     private ?DateTime $createdAt;
 
     #[ORM\Column(type: 'json')]

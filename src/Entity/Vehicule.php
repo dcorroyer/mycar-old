@@ -71,38 +71,65 @@ class Vehicule
 
     #[ORM\Column(type: 'string', length: 20)]
     #[Groups(['read:vehicule:item', 'read:vehicule:collection', 'write:vehicule:item'])]
-    #[Assert\Choice(
-        choices: [
-            Vehicule::TYPE['CAR'],
-            Vehicule::TYPE['MOTORCYCLE'],
-            Vehicule::TYPE['SCOOTER']
-        ]
-    )]
+    #[
+        Assert\NotBlank(),
+        Assert\Choice(
+            choices: [
+                Vehicule::TYPE['CAR'],
+                Vehicule::TYPE['MOTORCYCLE'],
+                Vehicule::TYPE['SCOOTER']
+            ]
+        )
+    ]
     private ?string $type;
 
     #[ORM\Column(type: 'string', length: 20)]
     #[Groups(['read:vehicule:item', 'read:vehicule:collection', 'write:vehicule:item'])]
+    #[
+        Assert\NotBlank(),
+        Assert\Length(max: 20)
+    ]
     private ?string $identification;
 
     #[ORM\Column(type: 'string', length: 100)]
     #[Groups(['read:vehicule:item', 'read:vehicule:collection', 'write:vehicule:item'])]
+    #[
+        Assert\NotBlank(),
+        Assert\Length(max: 100)
+    ]
     private ?string $brand;
 
     #[ORM\Column(type: 'string', length: 100)]
     #[Groups(['read:vehicule:item', 'read:vehicule:collection', 'write:vehicule:item'])]
+    #[
+        Assert\NotBlank(),
+        Assert\Length(max: 100)
+    ]
     private ?string $reference;
 
     #[ORM\Column(type: 'integer')]
     #[Groups(['read:vehicule:item', 'read:vehicule:collection', 'write:vehicule:item'])]
+    #[
+        Assert\NotBlank(),
+        Assert\Type(
+            type: 'integer',
+            message: 'The value {{ value }} is not a valid {{ type }}.',
+        )
+    ]
     private ?int $modelyear;
 
     #[ORM\Column(type: 'datetime')]
     #[Groups(['read:vehicule:item'])]
+    #[
+        Assert\NotBlank(),
+        Assert\Date()
+    ]
     private ?DateTime $createdAt;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'vehicules')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['read:vehicule:item', 'read:vehicule:collection', 'write:vehicule:item'])]
+    #[Assert\NotBlank()]
     private ?User $user;
 
     #[ORM\OneToMany(mappedBy: 'vehicule', targetEntity: Maintenance::class, orphanRemoval: true)]
