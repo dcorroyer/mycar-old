@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\InvoiceRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -100,6 +101,16 @@ class Invoice
         $this->maintenance = $maintenance;
 
         return $this;
+    }
+
+    /**
+     * @return Vehicule|null
+     * @Groups({"read:invoice:item"})
+     * @ApiSubresource()
+     */
+    public function getVehicule(): ?Vehicule
+    {
+        return $this->getMaintenance()->getVehicule();
     }
 
     /**
